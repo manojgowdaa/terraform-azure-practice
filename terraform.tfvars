@@ -20,7 +20,8 @@ subnet_name            = "subnet-main"
 subnet_address_prefix  = ["10.0.1.0/24"]
 
 # Storage Account (must be unique globally, use lowercase alphanumeric only)
-storage_account_name = "storageaccttest"
+# Change this to a unique name - e.g., storageacct1234567890
+storage_account_name = "storageacct9876543"
 
 # Virtual Machine
 vm_name           = "vm-ubuntu"
