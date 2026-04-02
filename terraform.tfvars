@@ -1,11 +1,11 @@
 # Azure Tenant ID - Replace with your actual Tenant ID
 # You can find this in Azure Portal > Azure Active Directory > Properties
-#azure_tenant_id = "YOUR_TENANT_ID_HERE"
+azure_tenant_id = "c5801acd-6d72-4b45-89bf-dbfee1206555"
 
 # Azure subscription ID 
 # Replace with your actual subscription ID from "Azure subscription 1"
 # Found in Azure Portal > Subscriptions
-#azure_subscription_id = "YOUR_SUBSCRIPTION_ID_HERE"
+azure_subscription_id = "54b06fc1-bb3e-4693-801a-2f4866a3e832"
 
 # Azure region/location
 azure_location = "East US"
