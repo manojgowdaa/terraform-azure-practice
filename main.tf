@@ -10,7 +10,7 @@ module "create_resource_group" {
 }
 
 module "create_storage_account" {
-  source = "./modules/create_s3"
+  source = "./modules/create_storage_account"
   
   resource_group_name = module.create_resource_group.resource_group_name
   location            = var.azure_location
