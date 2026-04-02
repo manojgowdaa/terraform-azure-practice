@@ -25,5 +25,5 @@ storage_account_name = "storageacct9876543"
 
 # Virtual Machine
 vm_name           = "vm-ubuntu"
-vm_size           = "Standard_B1s"
+vm_size           = "Standard_B2s"
 vm_admin_username = "azureuser"
