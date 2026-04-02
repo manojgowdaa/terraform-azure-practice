@@ -1,13 +1,29 @@
 variable "azure_subscription_id" {
   description = "Azure Subscription ID"
   type        = string
-  default     = "5f5b1f8c-1a6b-4e7d-8f9c-0b2d3e4f5a6b"
+  sensitive   = true
+  default     = ""
 }
 
 variable "azure_tenant_id" {
   description = "Azure Tenant ID"
   type        = string
   sensitive   = true
+  default     = ""
+}
+
+variable "azure_client_id" {
+  description = "Azure Client ID"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
+variable "azure_client_secret" {
+  description = "Azure Client Secret"
+  type        = string
+  sensitive   = true
+  default     = ""
 }
 
 variable "azure_location" {
