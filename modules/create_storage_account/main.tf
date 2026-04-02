@@ -18,7 +18,7 @@ resource "azurerm_storage_container" "tfstate_container" {
   container_access_type = "private"
 }
 
-resource "azurerm_storage_account_blob_properties" "sa_blob_props" {
+resource "azurerm_storage_blob_service_properties" "sa_blob_props" {
   storage_account_id = azurerm_storage_account.sa_terraform_state.id
 
   delete_retention_policy {
