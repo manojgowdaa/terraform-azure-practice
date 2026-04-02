@@ -11,7 +11,7 @@ azure_subscription_id = "54b06fc1-bb3e-4693-801a-2f4866a3e832"
 azure_location = "East US"
 
 # Resource Group
-resource_group_name = "rg-test"
+resource_group_name = "rg-terraform-test-2026"
 
 # Virtual Network and Subnet
 vnet_name              = "vnet-main"
