@@ -20,7 +20,7 @@ module "create_storage_account" {
 }
 
 module "create_virtual_machine" {
-  source = "./modules/create_ec2"
+  source = "./modules/create_virtual_machine"
   
   resource_group_name   = module.create_resource_group.resource_group_name
   location              = var.azure_location

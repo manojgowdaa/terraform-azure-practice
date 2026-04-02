@@ -27,4 +27,3 @@ resource "azurerm_storage_account_blob_properties" "sa_blob_props" {
 
   versioning_enabled = true
 }
-create_virtual_machine
