@@ -68,6 +68,12 @@ variable "storage_account_name" {
   default     = "storageaccttest"
 }
 
+variable "acr_name" {
+  description = "Name of the Azure Container Registry"
+  type        = string
+  default     = "acrtest"
+}
+
 variable "vm_name" {
   description = "Name of the Azure Virtual Machine"
   type        = string
