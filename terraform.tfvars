@@ -23,6 +23,9 @@ subnet_address_prefix  = ["10.0.1.0/24"]
 # Change this to a unique name - e.g., storageacct1234567890
 storage_account_name = "storageacct9876543"
 
+# Azure Container Registry (must be globally unique, alphanumeric only)
+acr_name = "acrterraformtest2026"
+
 # Virtual Machine
 vm_name           = "vm-ubuntu"
 vm_size           = "Standard_D2s_v3"

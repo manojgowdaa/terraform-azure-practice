@@ -38,6 +38,16 @@ output "terraform_state_container" {
   value       = module.create_storage_account.container_name
 }
 
+output "acr_name" {
+  description = "Name of the Azure Container Registry"
+  value       = module.create_container_registry.acr_name
+}
+
+output "acr_login_server" {
+  description = "Login server URL of the Azure Container Registry"
+  value       = module.create_container_registry.acr_login_server
+}
+
 # output "ssh_private_key" {
 #   description = "SSH private key for accessing the Virtual Machine"
 #   value       = module.create_virtual_machine.ssh_private_key
