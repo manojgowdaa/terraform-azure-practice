@@ -29,7 +29,7 @@ acr_name = "acrterraformtest2026"
 # App Service (Linux Web App with container)
 app_service_plan_name = "asp-linux-terraform-2026"
 app_name_prefix       = "webapp-linux-tf2026"
-app_count             = 2
+app_count             = 1
 docker_image          = "nginx:latest"
 docker_registry_url   = "https://index.docker.io"
 
