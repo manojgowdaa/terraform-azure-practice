@@ -19,15 +19,15 @@ module "create_storage_account" {
   depends_on = [module.create_resource_group]
 }
 
-module "create_virtual_machine" {
-  source = "./modules/create_virtual_machine"
+#module "create_virtual_machine" {
+#  source = "./modules/create_virtual_machine"
   
-  resource_group_name   = module.create_resource_group.resource_group_name
-  location              = var.azure_location
-  vm_name               = var.vm_name
-  vm_size               = var.vm_size
-  subnet_id             = module.create_resource_group.subnet_id
-  vm_admin_username     = var.vm_admin_username
+#  resource_group_name   = module.create_resource_group.resource_group_name
+#  location              = var.azure_location
+#  vm_name               = var.vm_name
+#  vm_size               = var.vm_size
+#  subnet_id             = module.create_resource_group.subnet_id
+#  vm_admin_username     = var.vm_admin_username
   
-  depends_on = [module.create_resource_group]
-}
+#  depends_on = [module.create_resource_group]
+#}
