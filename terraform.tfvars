@@ -26,6 +26,13 @@ storage_account_name = "storageacct9876543"
 # Azure Container Registry (must be globally unique, alphanumeric only)
 acr_name = "acrterraformtest2026"
 
+# App Service (Linux Web App with container)
+app_service_plan_name = "asp-linux-terraform-2026"
+app_name_prefix       = "webapp-linux-tf2026"
+app_count             = 2
+docker_image          = "nginx:latest"
+docker_registry_url   = "https://index.docker.io"
+
 # Virtual Machine
 vm_name           = "vm-ubuntu"
 vm_size           = "Standard_D2s_v3"
