@@ -8,7 +8,7 @@ azure_tenant_id = "c5801acd-6d72-4b45-89bf-dbfee1206555"
 azure_subscription_id = "54b06fc1-bb3e-4693-801a-2f4866a3e832"
 
 # Azure region/location
-azure_location = "East US"
+azure_location = "Canada Central"
 
 # Resource Group
 resource_group_name = "rg-terraform-test-2026"
