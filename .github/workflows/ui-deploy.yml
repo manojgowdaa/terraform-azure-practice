@@ -11,10 +11,11 @@ on:
 
 env:
   ACR_NAME: acrterraformtest2026
-  RESOURCE_GROUP: rg-terraform-test-2026
-  WEBAPP_NAME: webapp-linux-tf2026-1
+  REGISTRY: ghcr.io
   IMAGE_NAME: ui-app
   IMAGE_TAG: ${{ github.sha }}
+  RESOURCE_GROUP: rg-terraform-test-2026
+  WEBAPP_NAME: webapp-linux-tf2026-1
   AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
   AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
   AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
@@ -31,8 +32,18 @@ jobs:
       - name: Build Docker image
         working-directory: ui
         run: |
-          docker build -t ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} .
-          docker tag ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest
+          docker build -t ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} .
+          docker tag ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}:latest
+          docker tag ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}:latest ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest
+
+      - name: Log in to GitHub Container Registry
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
+
+      - name: Push Docker image to GHCR (built on agent)
+        run: |
+          docker push ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          docker push ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}:latest
 
       - name: Azure Login
         uses: azure/login@v1
@@ -49,20 +60,19 @@ jobs:
         run: |
           az acr login --name ${{ env.ACR_NAME }}
 
-      - name: Push Docker image to ACR
+      - name: Push Docker image to ACR (also push locally built image)
         run: |
-          docker push ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
           docker push ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest
 
-      - name: Update App Service with new Docker image
+      - name: Update App Service with Docker image from local machine
         run: |
           az webapp config container set \
             --name ${{ env.WEBAPP_NAME }} \
             --resource-group ${{ env.RESOURCE_GROUP }} \
-            --docker-custom-image-name ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest \
-            --docker-registry-server-url https://${{ env.ACR_NAME }}.azurecr.io \
-            --docker-registry-server-user ${{ env.AZURE_CLIENT_ID }} \
-            --docker-registry-server-password "${{ env.AZURE_CLIENT_SECRET }}"
+            --docker-custom-image-name ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}:latest \
+            --docker-registry-server-url https://${{ env.REGISTRY }} \
+            --docker-registry-server-user ${{ github.actor }} \
+            --docker-registry-server-password "${{ secrets.GITHUB_TOKEN }}"
 
       - name: Restart App Service
         run: |
