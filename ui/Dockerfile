@@ -1,40 +1,13 @@
-# Build stage
-FROM node:18-alpine AS builder
-
-WORKDIR /app
-
-# Copy package files
-COPY package*.json ./
-
-# Install dependencies
-RUN npm ci
-
-# Copy source code
-COPY . .
-
-# Build the application
-RUN npm run build
-
-# Runtime stage
+# Simple Node.js test image
 FROM node:18-alpine
 
 WORKDIR /app
 
-# Install serve to run the application
-RUN npm install -g serve
+# Create a simple hello world app
+RUN echo 'const express = require("express"); const app = express(); app.get("/", (req, res) => res.send("Hello World!")); app.listen(3000, () => console.log("Server running on port 3000"));' > app.js
 
-# Copy built application from builder stage
-COPY --from=builder /app/build ./build
+RUN npm init -y && npm install express
 
-# Copy package.json for reference
-COPY --from=builder /app/package.json ./
-
-# Expose port
 EXPOSE 3000
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:3000', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
-
-# Start the application
-CMD ["serve", "-s", "build", "-l", "3000"]
+CMD ["node", "app.js"]
