@@ -8,7 +8,7 @@ azure_tenant_id = "c5801acd-6d72-4b45-89bf-dbfee1206555"
 azure_subscription_id = "54b06fc1-bb3e-4693-801a-2f4866a3e832"
 
 # Azure region/location
-azure_location = "East US"
+azure_location = "Canada Central"
 
 # Resource Group
 resource_group_name = "rg-terraform-test-2026"
@@ -25,6 +25,13 @@ storage_account_name = "storageacct9876543"
 
 # Azure Container Registry (must be globally unique, alphanumeric only)
 acr_name = "acrterraformtest2026"
+
+# App Service (Linux Web App with container)
+app_service_plan_name = "asp-linux-terraform-2026"
+app_name_prefix       = "webapp-linux-tf2026"
+app_count             = 1
+docker_image          = "nginx:latest"
+docker_registry_url   = "https://index.docker.io"
 
 # Virtual Machine
 vm_name           = "vm-ubuntu"

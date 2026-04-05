@@ -48,6 +48,16 @@ output "acr_login_server" {
   value       = module.create_container_registry.acr_login_server
 }
 
+output "app_service_names" {
+  description = "Names of the Linux Web Apps"
+  value       = module.create_app_service.app_names
+}
+
+output "app_service_hostnames" {
+  description = "Default hostnames of the Linux Web Apps"
+  value       = module.create_app_service.app_default_hostnames
+}
+
 # output "ssh_private_key" {
 #   description = "SSH private key for accessing the Virtual Machine"
 #   value       = module.create_virtual_machine.ssh_private_key

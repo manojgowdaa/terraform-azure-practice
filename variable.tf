@@ -74,6 +74,36 @@ variable "acr_name" {
   default     = "acrtest"
 }
 
+variable "app_service_plan_name" {
+  description = "Name of the App Service Plan"
+  type        = string
+  default     = "asp-linux"
+}
+
+variable "app_name_prefix" {
+  description = "Prefix for the Linux Web App names"
+  type        = string
+  default     = "webapp-linux"
+}
+
+variable "app_count" {
+  description = "Number of Linux Web App instances to create"
+  type        = number
+  default     = 1
+}
+
+variable "docker_image" {
+  description = "Docker image and tag for the container"
+  type        = string
+  default     = "nginx:latest"
+}
+
+variable "docker_registry_url" {
+  description = "URL of the container registry"
+  type        = string
+  default     = "https://index.docker.io"
+}
+
 variable "vm_name" {
   description = "Name of the Azure Virtual Machine"
   type        = string
