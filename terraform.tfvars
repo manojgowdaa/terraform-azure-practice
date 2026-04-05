@@ -37,3 +37,9 @@ docker_registry_url   = "https://index.docker.io"
 vm_name           = "vm-ubuntu"
 vm_size           = "Standard_D2s_v3"
 vm_admin_username = "azureuser"
+
+# SQL Database
+sql_server_name     = "sqlserver-terraform-2026"
+sql_admin_username  = "sqladmin"
+sql_admin_password  = "P@ssw0rd1234!"
+database_name       = "sqldb-terraform-2026"

@@ -43,6 +43,19 @@ module "create_app_service" {
   depends_on = [module.create_resource_group]
 }
 
+module "create_sql_database" {
+  source = "./modules/create_sql_database"
+
+  resource_group_name = module.create_resource_group.resource_group_name
+  location            = var.azure_location
+  sql_server_name     = var.sql_server_name
+  admin_username      = var.sql_admin_username
+  admin_password      = var.sql_admin_password
+  database_name       = var.database_name
+
+  depends_on = [module.create_resource_group]
+}
+
 #module "create_virtual_machine" {
 #  source = "./modules/create_virtual_machine"
   

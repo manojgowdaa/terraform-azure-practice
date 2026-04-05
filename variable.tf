@@ -121,3 +121,29 @@ variable "vm_admin_username" {
   type        = string
   default     = "azureuser"
 }
+
+variable "sql_server_name" {
+  description = "Name of the Azure SQL Server"
+  type        = string
+  default     = "sqlserver-main"
+}
+
+variable "sql_admin_username" {
+  description = "Administrator username for SQL Server"
+  type        = string
+  sensitive   = true
+  default     = "sqladmin"
+}
+
+variable "sql_admin_password" {
+  description = "Administrator password for SQL Server"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
+variable "database_name" {
+  description = "Name of the Azure SQL Database"
+  type        = string
+  default     = "sqldb-main"
+}

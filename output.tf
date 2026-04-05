@@ -18,6 +18,31 @@ output "subnet_id" {
   value       = module.create_resource_group.subnet_id
 }
 
+output "sql_server_id" {
+  description = "ID of the SQL Server"
+  value       = module.create_sql_database.sql_server_id
+}
+
+output "sql_server_name" {
+  description = "Name of the SQL Server"
+  value       = module.create_sql_database.sql_server_name
+}
+
+output "sql_server_fqdn" {
+  description = "Fully Qualified Domain Name of the SQL Server"
+  value       = module.create_sql_database.sql_server_fqdn
+}
+
+output "database_id" {
+  description = "ID of the SQL Database"
+  value       = module.create_sql_database.database_id
+}
+
+output "database_name" {
+  description = "Name of the SQL Database"
+  value       = module.create_sql_database.database_name
+}
+
 # output "vm_public_ip" {
 #   description = "Public IP address of the Azure VM"
 #   value       = module.create_virtual_machine.public_ip_address
