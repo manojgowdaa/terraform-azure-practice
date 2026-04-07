@@ -54,10 +54,12 @@ jobs:
           NSG="nsg-main"
           STORAGE="storageacct9876543"
           ACR="acrterraformtest2026"
-          APP="webapp-linux-tf2026-1"
+          APP_PLAN="asp-linux-terraform-2026"
+          APP="webapp-linux-tf2026"
           SQL_SERVER="sqlserver-terraform-2026"
           SQL_DB="sqldb-terraform-2026"
 
+          # --- Resource Group Module ---
           echo "Import Resource Group"
           terraform import module.create_resource_group.azurerm_resource_group.rg_main /subscriptions/$SUB/resourceGroups/$RG
 
@@ -73,20 +75,33 @@ jobs:
           echo "Import Subnet-NSG Association"
           terraform import module.create_resource_group.azurerm_subnet_network_security_group_association.subnet_nsg_assoc /subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Network/virtualNetworks/$VNET/subnets/$SUBNET
 
+          # --- Storage Account Module ---
           echo "Import Storage Account"
-          terraform import module.create_resource_group.azurerm_storage_account.storage /subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Storage/storageAccounts/$STORAGE
+          terraform import module.create_storage_account.azurerm_storage_account.sa_terraform_state /subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Storage/storageAccounts/$STORAGE
 
+          echo "Import Storage Container"
+          terraform import module.create_storage_account.azurerm_storage_container.tfstate_container https://$STORAGE.blob.core.windows.net/tfstate
+
+          # --- Container Registry Module ---
           echo "Import Azure Container Registry"
-          terraform import module.create_resource_group.azurerm_container_registry.acr /subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.ContainerRegistry/registries/$ACR
+          terraform import module.create_container_registry.azurerm_container_registry.acr /subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.ContainerRegistry/registries/$ACR
 
-          echo "Import App Service"
-          terraform import module.create_resource_group.azurerm_linux_web_app.app_service /subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Web/sites/$APP
+          # --- App Service Module ---
+          echo "Import App Service Plan"
+          terraform import module.create_app_service.azurerm_service_plan.app_plan /subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Web/serverFarms/$APP_PLAN
 
+          echo "Import Linux Web App"
+          terraform import 'module.create_app_service.azurerm_linux_web_app.app[0]' /subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Web/sites/$APP-1
+
+          # --- SQL Database Module ---
           echo "Import SQL Server"
-          terraform import module.create_resource_group.azurerm_mssql_server.sql_server /subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Sql/servers/$SQL_SERVER
+          terraform import module.create_sql_database.azurerm_mssql_server.sql_server /subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Sql/servers/$SQL_SERVER
+
+          echo "Import SQL Firewall Rule"
+          terraform import module.create_sql_database.azurerm_sql_firewall_rule.sql_firewall_rule /subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Sql/servers/$SQL_SERVER/firewallRules/AllowAzureServices
 
           echo "Import SQL Database"
-          terraform import module.create_resource_group.azurerm_mssql_database.sql_db /subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Sql/servers/$SQL_SERVER/databases/$SQL_DB
+          terraform import module.create_sql_database.azurerm_mssql_database.sql_database /subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Sql/servers/$SQL_SERVER/databases/$SQL_DB
 
           echo "✅ Import Completed"
 
