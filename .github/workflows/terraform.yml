@@ -41,55 +41,54 @@ jobs:
       - name: Terraform Init
         run: terraform init -upgrade
 
-      # 🔥 IMPORT EVERYTHING
-      - name: Import All Resources
+      # ----------------------------
+      # Import Existing Resources
+      # ----------------------------
+      - name: Import Existing Resources
         run: |
           set +e
-
-          SUB="/subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+          SUB="${{ secrets.AZURE_SUBSCRIPTION_ID }}"
           RG="rg-terraform-test-2026"
+          VNET="vnet-main"
+          SUBNET="subnet-main"
+          NSG="nsg-main"
+          STORAGE="storageacct9876543"
+          ACR="acrterraformtest2026"
+          APP="webapp-linux-tf2026-1"
+          SQL_SERVER="sqlserver-terraform-2026"
+          SQL_DB="sqldb-terraform-2026"
 
-          echo "=== Resource Group ==="
-          terraform import module.create_resource_group.azurerm_resource_group.rg_main \
-          $SUB/resourceGroups/$RG
+          echo "Import Resource Group"
+          terraform import module.create_resource_group.azurerm_resource_group.rg_main /subscriptions/$SUB/resourceGroups/$RG
 
-          echo "=== Virtual Network ==="
-          terraform import module.create_resource_group.azurerm_virtual_network.vnet_main \
-          $SUB/resourceGroups/$RG/providers/Microsoft.Network/virtualNetworks/<vnet-name>
+          echo "Import Virtual Network"
+          terraform import module.create_resource_group.azurerm_virtual_network.vnet_main /subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Network/virtualNetworks/$VNET
 
-          echo "=== Subnet ==="
-          terraform import module.create_resource_group.azurerm_subnet.subnet_main \
-          $SUB/resourceGroups/$RG/providers/Microsoft.Network/virtualNetworks/<vnet-name>/subnets/<subnet-name>
+          echo "Import Subnet"
+          terraform import module.create_resource_group.azurerm_subnet.subnet_main /subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Network/virtualNetworks/$VNET/subnets/$SUBNET
 
-          echo "=== Network Security Group ==="
-          terraform import module.create_resource_group.azurerm_network_security_group.nsg_main \
-          $SUB/resourceGroups/$RG/providers/Microsoft.Network/networkSecurityGroups/<nsg-name>
+          echo "Import Network Security Group"
+          terraform import module.create_resource_group.azurerm_network_security_group.nsg_main /subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Network/networkSecurityGroups/$NSG
 
-          echo "=== NSG Association ==="
-          terraform import module.create_resource_group.azurerm_subnet_network_security_group_association.subnet_nsg_assoc \
-          $SUB/resourceGroups/$RG/providers/Microsoft.Network/virtualNetworks/<vnet-name>/subnets/<subnet-name>
+          echo "Import Subnet-NSG Association"
+          terraform import module.create_resource_group.azurerm_subnet_network_security_group_association.subnet_nsg_assoc /subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Network/virtualNetworks/$VNET/subnets/$SUBNET
 
-          echo "=== Storage Account ==="
-          terraform import module.create_resource_group.azurerm_storage_account.storage \
-          $SUB/resourceGroups/$RG/providers/Microsoft.Storage/storageAccounts/storageacct9876543
+          echo "Import Storage Account"
+          terraform import module.create_resource_group.azurerm_storage_account.storage /subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Storage/storageAccounts/$STORAGE
 
-          echo "=== Azure Container Registry ==="
-          terraform import module.create_resource_group.azurerm_container_registry.acr \
-          $SUB/resourceGroups/$RG/providers/Microsoft.ContainerRegistry/registries/acrterraformtest2026
+          echo "Import Azure Container Registry"
+          terraform import module.create_resource_group.azurerm_container_registry.acr /subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.ContainerRegistry/registries/$ACR
 
-          echo "=== App Service (Linux Web App) ==="
-          terraform import module.create_resource_group.azurerm_linux_web_app.app_service \
-          $SUB/resourceGroups/$RG/providers/Microsoft.Web/sites/webapp-linux-tf2026-1
+          echo "Import App Service"
+          terraform import module.create_resource_group.azurerm_linux_web_app.app_service /subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Web/sites/$APP
 
-          echo "=== SQL Server ==="
-          terraform import module.create_resource_group.azurerm_mssql_server.sql_server \
-          $SUB/resourceGroups/$RG/providers/Microsoft.Sql/servers/sqlserver-terraform-2026
+          echo "Import SQL Server"
+          terraform import module.create_resource_group.azurerm_mssql_server.sql_server /subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Sql/servers/$SQL_SERVER
 
-          echo "=== SQL Database ==="
-          terraform import module.create_resource_group.azurerm_mssql_database.sql_db \
-          $SUB/resourceGroups/$RG/providers/Microsoft.Sql/servers/sqlserver-terraform-2026/databases/sqldb-terraform-2026
+          echo "Import SQL Database"
+          terraform import module.create_resource_group.azurerm_mssql_database.sql_db /subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Sql/servers/$SQL_SERVER/databases/$SQL_DB
 
-          echo "=== Import Completed ==="
+          echo "✅ Import Completed"
 
       - name: Terraform Validate
         run: terraform validate
