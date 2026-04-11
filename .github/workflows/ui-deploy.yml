@@ -11,7 +11,6 @@ on:
 
 env:
   ACR_NAME: acrterraformtest2026
-  REGISTRY: ghcr.io
   IMAGE_NAME: ui-app
   IMAGE_TAG: ${{ github.sha }}
   RESOURCE_GROUP: rg-terraform-test-2026
@@ -29,22 +28,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build Docker image
-        working-directory: ui
-        run: |
-          docker build -t ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} .
-          docker tag ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}:latest
-          docker tag ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}:latest ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest
-
-      - name: Log in to GitHub Container Registry
-        run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
-
-      - name: Push Docker image to GHCR (built on agent)
-        run: |
-          docker push ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-          docker push ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}:latest
-
       - name: Azure Login
         uses: azure/login@v1
         with:
@@ -56,23 +39,39 @@ jobs:
               "tenantId": "${{ env.AZURE_TENANT_ID }}"
             }
 
+      - name: Build Docker image
+        working-directory: ui
+        run: |
+          docker build -t ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} .
+          docker tag ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest
+
       - name: Log in to Azure Container Registry
         run: |
           az acr login --name ${{ env.ACR_NAME }}
 
-      - name: Push Docker image to ACR (also push locally built image)
+      - name: Push Docker image to ACR
         run: |
+          docker push ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
           docker push ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest
 
-      - name: Update App Service with Docker image from local machine
+      - name: Get ACR credentials
+        id: acr-creds
+        run: |
+          ACR_USERNAME=$(az acr credential show --name ${{ env.ACR_NAME }} --query username -o tsv)
+          ACR_PASSWORD=$(az acr credential show --name ${{ env.ACR_NAME }} --query "passwords[0].value" -o tsv)
+          echo "::add-mask::$ACR_PASSWORD"
+          echo "acr_username=$ACR_USERNAME" >> $GITHUB_OUTPUT
+          echo "acr_password=$ACR_PASSWORD" >> $GITHUB_OUTPUT
+
+      - name: Deploy to App Service from ACR
         run: |
           az webapp config container set \
             --name ${{ env.WEBAPP_NAME }} \
             --resource-group ${{ env.RESOURCE_GROUP }} \
-            --docker-custom-image-name ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}:latest \
-            --docker-registry-server-url https://${{ env.REGISTRY }} \
-            --docker-registry-server-user ${{ github.actor }} \
-            --docker-registry-server-password "${{ secrets.GITHUB_TOKEN }}"
+            --docker-custom-image-name ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest \
+            --docker-registry-server-url https://${{ env.ACR_NAME }}.azurecr.io \
+            --docker-registry-server-user ${{ steps.acr-creds.outputs.acr_username }} \
+            --docker-registry-server-password "${{ steps.acr-creds.outputs.acr_password }}"
 
       - name: Restart App Service
         run: |
