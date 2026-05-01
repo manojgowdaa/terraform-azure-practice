@@ -82,8 +82,7 @@ jobs:
               DB_NAME=${{ secrets.DB_NAME }} \
               DB_USER=${{ secrets.DB_USER }} \
               DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-              DB_PORT=1433 \
-              WEBSITES_PORT=8000
+              DB_PORT=1433
 
       - name: Restart App Service
         run: |

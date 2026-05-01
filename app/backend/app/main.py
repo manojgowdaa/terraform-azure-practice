@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.routes import product  # Import the product router
 from app.routes import order    # Import the order router
 from app.routes import auth     # Import the auth router
+from app.db.database import SessionLocal
 
 # ──────────────────────────────────────────────
 # LOGGING SETUP
@@ -52,4 +53,16 @@ def root():
 def health_check():
     logger.info("Health check called")
     return {"status": "healthy", "service": "Namma Dairy API"}
+
+
+@app.get("/health/db")
+def health_db():
+    try:
+        db = SessionLocal()
+        db.execute("SELECT 1")
+        db.close()
+        return {"status": "connected", "database": "OK"}
+    except Exception as e:
+        logger.error(f"DB health check failed: {e}")
+        return {"status": "error", "detail": str(e)}
 

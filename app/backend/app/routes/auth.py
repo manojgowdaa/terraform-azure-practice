@@ -23,7 +23,11 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
 # POST /auth/login → verify credentials (only users from users.xlsx can login)
 @router.post("/login")
 def login(req: LoginRequest, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == req.email).first()
+    try:
+        user = db.query(User).filter(User.email == req.email).first()
+    except Exception as e:
+        logger.error(f"Database error during login: {e}")
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
 
     if not user or not verify_password(req.password, user.password_hash):
         raise HTTPException(status_code=401, detail="Invalid email or password")
