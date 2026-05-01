@@ -44,6 +44,52 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
+      - name: Import Existing Resources
+        continue-on-error: true
+        env:
+          SUB_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        run: |
+          RG="/subscriptions/${SUB_ID}/resourceGroups/rg-terraform-test-2026"
+
+          # Resource Group
+          terraform import module.create_resource_group.azurerm_resource_group.rg_main "$RG" || true
+
+          # VNet
+          terraform import module.create_resource_group.azurerm_virtual_network.vnet_main "$RG/providers/Microsoft.Network/virtualNetworks/vnet-main" || true
+
+          # Subnet
+          terraform import module.create_resource_group.azurerm_subnet.subnet_main "$RG/providers/Microsoft.Network/virtualNetworks/vnet-main/subnets/subnet-main" || true
+
+          # NSG
+          terraform import module.create_resource_group.azurerm_network_security_group.nsg_main "$RG/providers/Microsoft.Network/networkSecurityGroups/nsg-main" || true
+
+          # NSG Association
+          terraform import module.create_resource_group.azurerm_subnet_network_security_group_association.subnet_nsg_assoc "$RG/providers/Microsoft.Network/virtualNetworks/vnet-main/subnets/subnet-main" || true
+
+          # Storage Account
+          terraform import module.create_storage_account.azurerm_storage_account.sa_terraform_state "$RG/providers/Microsoft.Storage/storageAccounts/storageacct9876543" || true
+
+          # Storage Container
+          terraform import module.create_storage_account.azurerm_storage_container.tfstate_container "https://storageacct9876543.blob.core.windows.net/tfstate" || true
+
+          # Container Registry
+          terraform import module.create_container_registry.azurerm_container_registry.acr "$RG/providers/Microsoft.ContainerRegistry/registries/acrterraformtest2026" || true
+
+          # App Service Plan
+          terraform import module.create_app_service.azurerm_service_plan.app_plan "$RG/providers/Microsoft.Web/serverfarms/asp-linux-terraform-2026" || true
+
+          # App Service (existing - index 0)
+          terraform import 'module.create_app_service.azurerm_linux_web_app.app[0]' "$RG/providers/Microsoft.Web/sites/webapp-linux-tf2026-1" || true
+
+          # SQL Server
+          terraform import module.create_sql_database.azurerm_mssql_server.sql_server "$RG/providers/Microsoft.Sql/servers/sqlserver-terraform-2026" || true
+
+          # SQL Firewall Rule
+          terraform import module.create_sql_database.azurerm_sql_firewall_rule.sql_firewall_rule "$RG/providers/Microsoft.Sql/servers/sqlserver-terraform-2026/firewallRules/AllowAzureServices" || true
+
+          # SQL Database
+          terraform import module.create_sql_database.azurerm_mssql_database.sql_database "$RG/providers/Microsoft.Sql/servers/sqlserver-terraform-2026/databases/sqldb-terraform-2026" || true
+
       - name: Terraform Plan
         run: terraform plan -out=tfplan
 
