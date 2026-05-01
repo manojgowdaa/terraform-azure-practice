@@ -46,6 +46,10 @@ resource "azurerm_network_security_group" "nsg_main" {
   tags = {
     Name = "nsg-main"
   }
+
+  lifecycle {
+    ignore_changes = [security_rule]
+  }
 }
 
 resource "azurerm_subnet_network_security_group_association" "subnet_nsg_assoc" {

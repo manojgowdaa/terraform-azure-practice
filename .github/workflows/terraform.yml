@@ -12,7 +12,7 @@ env:
   TF_VAR_azure_client_secret: ${{ secrets.AZURE_CLIENT_SECRET }}
   TF_VAR_azure_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
   TF_VAR_azure_tenant_id: ${{ secrets.AZURE_TENANT_ID }}
-  TF_VERSION: 1.0.0
+  TF_VERSION: 1.7.5
 
 jobs:
   terraform:
@@ -45,50 +45,54 @@ jobs:
         run: terraform validate
 
       - name: Import Existing Resources
-        continue-on-error: true
         env:
           SUB_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         run: |
           RG="/subscriptions/${SUB_ID}/resourceGroups/rg-terraform-test-2026"
 
-          # Resource Group
-          terraform import module.create_resource_group.azurerm_resource_group.rg_main "$RG" || true
+          echo "=== Importing Resource Group ==="
+          terraform import module.create_resource_group.azurerm_resource_group.rg_main "$RG" 2>&1 || echo "Already imported or skipped"
 
-          # VNet
-          terraform import module.create_resource_group.azurerm_virtual_network.vnet_main "$RG/providers/Microsoft.Network/virtualNetworks/vnet-main" || true
+          echo "=== Importing VNet ==="
+          terraform import module.create_resource_group.azurerm_virtual_network.vnet_main "$RG/providers/Microsoft.Network/virtualNetworks/vnet-main" 2>&1 || echo "Already imported or skipped"
 
-          # Subnet
-          terraform import module.create_resource_group.azurerm_subnet.subnet_main "$RG/providers/Microsoft.Network/virtualNetworks/vnet-main/subnets/subnet-main" || true
+          echo "=== Importing Subnet ==="
+          terraform import module.create_resource_group.azurerm_subnet.subnet_main "$RG/providers/Microsoft.Network/virtualNetworks/vnet-main/subnets/subnet-main" 2>&1 || echo "Already imported or skipped"
 
-          # NSG
-          terraform import module.create_resource_group.azurerm_network_security_group.nsg_main "$RG/providers/Microsoft.Network/networkSecurityGroups/nsg-main" || true
+          echo "=== Importing NSG ==="
+          terraform import module.create_resource_group.azurerm_network_security_group.nsg_main "$RG/providers/Microsoft.Network/networkSecurityGroups/nsg-main" 2>&1 || echo "Already imported or skipped"
 
-          # NSG Association
-          terraform import module.create_resource_group.azurerm_subnet_network_security_group_association.subnet_nsg_assoc "$RG/providers/Microsoft.Network/virtualNetworks/vnet-main/subnets/subnet-main" || true
+          echo "=== Importing NSG Association ==="
+          terraform import module.create_resource_group.azurerm_subnet_network_security_group_association.subnet_nsg_assoc "$RG/providers/Microsoft.Network/virtualNetworks/vnet-main/subnets/subnet-main" 2>&1 || echo "Already imported or skipped"
 
-          # Storage Account
-          terraform import module.create_storage_account.azurerm_storage_account.sa_terraform_state "$RG/providers/Microsoft.Storage/storageAccounts/storageacct9876543" || true
+          echo "=== Importing Storage Account ==="
+          terraform import module.create_storage_account.azurerm_storage_account.sa_terraform_state "$RG/providers/Microsoft.Storage/storageAccounts/storageacct9876543" 2>&1 || echo "Already imported or skipped"
 
-          # Storage Container
-          terraform import module.create_storage_account.azurerm_storage_container.tfstate_container "https://storageacct9876543.blob.core.windows.net/tfstate" || true
+          echo "=== Importing Storage Container ==="
+          terraform import module.create_storage_account.azurerm_storage_container.tfstate_container "https://storageacct9876543.blob.core.windows.net/tfstate" 2>&1 || echo "Already imported or skipped"
 
-          # Container Registry
-          terraform import module.create_container_registry.azurerm_container_registry.acr "$RG/providers/Microsoft.ContainerRegistry/registries/acrterraformtest2026" || true
+          echo "=== Importing Container Registry ==="
+          terraform import module.create_container_registry.azurerm_container_registry.acr "$RG/providers/Microsoft.ContainerRegistry/registries/acrterraformtest2026" 2>&1 || echo "Already imported or skipped"
 
-          # App Service Plan
-          terraform import module.create_app_service.azurerm_service_plan.app_plan "$RG/providers/Microsoft.Web/serverfarms/asp-linux-terraform-2026" || true
+          echo "=== Importing App Service Plan ==="
+          terraform import module.create_app_service.azurerm_service_plan.app_plan "$RG/providers/Microsoft.Web/serverFarms/asp-linux-terraform-2026" 2>&1 || echo "Already imported or skipped"
 
-          # App Service (existing - index 0)
-          terraform import 'module.create_app_service.azurerm_linux_web_app.app[0]' "$RG/providers/Microsoft.Web/sites/webapp-linux-tf2026-1" || true
+          echo "=== Importing App Service (webapp-linux-tf2026-1) ==="
+          terraform import 'module.create_app_service.azurerm_linux_web_app.app[0]' "$RG/providers/Microsoft.Web/sites/webapp-linux-tf2026-1" 2>&1 || echo "Already imported or skipped"
 
-          # SQL Server
-          terraform import module.create_sql_database.azurerm_mssql_server.sql_server "$RG/providers/Microsoft.Sql/servers/sqlserver-terraform-2026" || true
+          echo "=== Importing SQL Server ==="
+          terraform import module.create_sql_database.azurerm_mssql_server.sql_server "$RG/providers/Microsoft.Sql/servers/sqlserver-terraform-2026" 2>&1 || echo "Already imported or skipped"
 
-          # SQL Firewall Rule
-          terraform import module.create_sql_database.azurerm_sql_firewall_rule.sql_firewall_rule "$RG/providers/Microsoft.Sql/servers/sqlserver-terraform-2026/firewallRules/AllowAzureServices" || true
+          echo "=== Importing SQL Firewall Rule ==="
+          terraform import module.create_sql_database.azurerm_sql_firewall_rule.sql_firewall_rule "$RG/providers/Microsoft.Sql/servers/sqlserver-terraform-2026/firewallRules/AllowAzureServices" 2>&1 || echo "Already imported or skipped"
 
-          # SQL Database
-          terraform import module.create_sql_database.azurerm_mssql_database.sql_database "$RG/providers/Microsoft.Sql/servers/sqlserver-terraform-2026/databases/sqldb-terraform-2026" || true
+          echo "=== Importing SQL Database ==="
+          terraform import module.create_sql_database.azurerm_mssql_database.sql_database "$RG/providers/Microsoft.Sql/servers/sqlserver-terraform-2026/databases/sqldb-terraform-2026" 2>&1 || echo "Already imported or skipped"
+
+          echo "=== All imports complete ==="
+
+      - name: Terraform Refresh (sync state with actual Azure config)
+        run: terraform apply -refresh-only -auto-approve
 
       - name: Terraform Plan
         run: terraform plan -out=tfplan

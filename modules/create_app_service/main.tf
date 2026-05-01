@@ -27,4 +27,8 @@ resource "azurerm_linux_web_app" "app" {
   tags = {
     Name = "${var.app_name_prefix}-${count.index + 1}"
   }
+
+  lifecycle {
+    ignore_changes = [site_config]
+  }
 }

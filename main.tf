@@ -25,6 +25,7 @@ module "create_container_registry" {
   acr_name            = var.acr_name
   resource_group_name = module.create_resource_group.resource_group_name
   location            = var.azure_location
+  admin_enabled       = true
 
   depends_on = [module.create_resource_group]
 }

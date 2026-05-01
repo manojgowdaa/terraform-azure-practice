@@ -9,6 +9,10 @@ resource "azurerm_mssql_server" "sql_server" {
   tags = {
     Name = var.sql_server_name
   }
+
+  lifecycle {
+    ignore_changes = [public_network_access_enabled, outbound_network_restriction_enabled]
+  }
 }
 
 resource "azurerm_sql_firewall_rule" "sql_firewall_rule" {
@@ -17,6 +21,10 @@ resource "azurerm_sql_firewall_rule" "sql_firewall_rule" {
   server_name         = azurerm_mssql_server.sql_server.name
   start_ip_address    = "0.0.0.0"
   end_ip_address      = "0.0.0.0"
+
+  lifecycle {
+    ignore_changes = [start_ip_address, end_ip_address]
+  }
 }
 
 resource "azurerm_mssql_database" "sql_database" {
