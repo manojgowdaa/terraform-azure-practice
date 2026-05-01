@@ -4,6 +4,22 @@
 *.tfstate.*
 crash.log
 
+# Environment variables (contains secrets!)
+.env
+
+# Node
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Build outputs
+dist/
+
 # Optional
 # *.tfvars
 .terraform.lock.hcl
