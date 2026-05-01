@@ -1,7 +1,5 @@
 // API service — all backend calls go through here
-const API_BASE = window.location.hostname === "localhost"
-  ? "http://localhost:8000"
-  : "https://webapp-linux-tf2026-3.azurewebsites.net";
+const API_BASE = "https://webapp-linux-tf2026-3.azurewebsites.net";
 
 export async function fetchProducts() {
   const response = await fetch(`${API_BASE}/products`);
