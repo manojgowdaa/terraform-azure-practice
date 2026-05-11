@@ -1,0 +1,23 @@
+{
+  "env": {
+    "AWS_BEARER_TOKEN_BEDROCK": "faad5c27-8f45-4fdf-9700-4b8f361eece5",
+    "ANTHROPIC_BEDROCK_BASE_URL": "https://genai-nexus.api.corpinter.net",
+    "CLAUDE_CODE_USE_BEDROCK": "1",
+    "ANTHROPIC_MODEL": "claude-sonnet-4.6",
+    "DISABLE_TELEMETRY": "1",
+    "DISABLE_ERROR_REPORTING": "1"
+  },
+  "permissions": {
+    "deny": [
+      "Read(**/.env*)",
+      "Read(./secrets/**)",
+      "Read(./config/credentials.json)",
+      "Read(./build)"
+    ]
+  },
+  "model": "claude-sonnet-4.6",
+  "alwaysThinkingEnabled": true,
+  "companyAnnouncements": [
+      "Welcome to Claude Code via the Mercedes-Benz AI Nexus. Review our Terms of Use at https://odp.i.mercedes-benz.com/docs/default/component/nexus-product-documentation/integrations/claude-code/terms-of-use-claude-code/."
+  ]
+}
