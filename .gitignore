@@ -26,3 +26,4 @@ dist/
 # Optional
 # *.tfvars
 .terraform.lock.hcl
+.claude/

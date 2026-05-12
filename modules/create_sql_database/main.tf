@@ -15,12 +15,11 @@ resource "azurerm_mssql_server" "sql_server" {
   }
 }
 
-resource "azurerm_sql_firewall_rule" "sql_firewall_rule" {
-  name                = "AllowAzureServices"
-  resource_group_name = var.resource_group_name
-  server_name         = azurerm_mssql_server.sql_server.name
-  start_ip_address    = "0.0.0.0"
-  end_ip_address      = "0.0.0.0"
+resource "azurerm_mssql_firewall_rule" "sql_firewall_rule" {
+  name             = "AllowAzureServices"
+  server_id        = azurerm_mssql_server.sql_server.id
+  start_ip_address = "0.0.0.0"
+  end_ip_address   = "0.0.0.0"
 
   lifecycle {
     ignore_changes = [start_ip_address, end_ip_address]
