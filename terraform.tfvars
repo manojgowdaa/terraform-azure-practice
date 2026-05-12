@@ -1,11 +1,11 @@
 # Azure Tenant ID - Replace with your actual Tenant ID
 # You can find this in Azure Portal > Azure Active Directory > Properties
-azure_tenant_id = "c5801acd-6d72-4b45-89bf-dbfee1206555"
+azure_tenant_id = "d677716a-4e46-4004-aa41-47f616f055cf"
 
 # Azure subscription ID 
 # Replace with your actual subscription ID from "Azure subscription 1"
 # Found in Azure Portal > Subscriptions
-azure_subscription_id = "54b06fc1-bb3e-4693-801a-2f4866a3e832"
+azure_subscription_id = "5e00f007-ce56-4281-bce7-d16548400e47"
 
 # Azure region/location
 azure_location = "Canada Central"
@@ -21,7 +21,7 @@ subnet_address_prefix  = ["10.0.1.0/24"]
 
 # Storage Account (must be unique globally, use lowercase alphanumeric only)
 # Change this to a unique name - e.g., storageacct1234567890
-storage_account_name = "storageacct9876543"
+storage_account_name = "storageacct98765432"
 
 # Azure Container Registry (must be globally unique, alphanumeric only)
 acr_name = "acrterraformtest2026"
