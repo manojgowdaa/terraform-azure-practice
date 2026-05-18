@@ -36,7 +36,7 @@ module "create_app_service" {
   app_service_plan_name = var.app_service_plan_name
   app_name_prefix       = var.app_name_prefix
   resource_group_name   = module.create_resource_group.resource_group_name
-  location              = var.azure_location
+  location              = "East US"
   app_count             = var.app_count
   docker_image          = var.docker_image
   docker_registry_url   = var.docker_registry_url
