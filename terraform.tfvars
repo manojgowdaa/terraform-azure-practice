@@ -24,12 +24,12 @@ subnet_address_prefix  = ["10.0.1.0/24"]
 storage_account_name = "storageacct98765432"
 
 # Azure Container Registry (must be globally unique, alphanumeric only)
-acr_name = "acrterraformtest2026"
+acr_name = "acrterraform2026vk"
 
 # App Service (Linux Web App with container)
 app_service_plan_name = "asp-linux-terraform-2026"
 app_name_prefix       = "webapp-linux-tf2026"
-app_count             = 3
+app_count             = 1
 docker_image          = "nginx:latest"
 docker_registry_url   = "https://index.docker.io"
 
@@ -39,7 +39,7 @@ vm_size           = "Standard_D2s_v3"
 vm_admin_username = "azureuser"
 
 # SQL Database
-sql_server_name     = "sqlserver-terraform-2026"
+sql_server_name     = "sqlserver-tf-2026-vk"
 sql_admin_username  = "sqladmin"
 sql_admin_password  = "P@ssw0rd1234!"
 database_name       = "sqldb-terraform-2026"
