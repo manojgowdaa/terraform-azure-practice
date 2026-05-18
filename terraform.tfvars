@@ -5,7 +5,7 @@ azure_tenant_id = "d677716a-4e46-4004-aa41-47f616f055cf"
 # Azure subscription ID 
 # Replace with your actual subscription ID from "Azure subscription 1"
 # Found in Azure Portal > Subscriptions
-azure_subscription_id = "5e00f007-ce56-4281-bce7-d16548400e47"
+azure_subscription_id = "066f974e-d4a4-4583-9a93-20adb9dcb37b"
 
 # Azure region/location
 azure_location = "Canada Central"

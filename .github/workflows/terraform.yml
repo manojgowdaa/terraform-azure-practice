@@ -84,7 +84,7 @@ jobs:
       #     terraform import module.create_sql_database.azurerm_mssql_server.sql_server "$RG/providers/Microsoft.Sql/servers/sqlserver-terraform-2026" 2>&1 || echo "Already imported or skipped"
 
       #     echo "=== Importing SQL Firewall Rule ==="
-      #     terraform import module.create_sql_database.azurerm_sql_firewall_rule.sql_firewall_rule "$RG/providers/Microsoft.Sql/servers/sqlserver-terraform-2026/firewallRules/AllowAzureServices" 2>&1 || echo "Already imported or skipped"
+      #     terraform import module.create_sql_database.azurerm_mssql_firewall_rule.sql_firewall_rule "$RG/providers/Microsoft.Sql/servers/sqlserver-terraform-2026/firewallRules/AllowAzureServices" 2>&1 || echo "Already imported or skipped"
 
       #     echo "=== Importing SQL Database ==="
       #     terraform import module.create_sql_database.azurerm_mssql_database.sql_database "$RG/providers/Microsoft.Sql/servers/sqlserver-terraform-2026/databases/sqldb-terraform-2026" 2>&1 || echo "Already imported or skipped"
